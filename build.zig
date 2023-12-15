@@ -4,32 +4,29 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    // Define arrays of source files and test files
+    // Define array of source files
     const src_files = &[_][]const u8{
         "src/sorting.zig",
         "src/searching.zig",
-        // Add more source files here
-    };
-    const test_files = &[_][]const u8{
-        "tests/sorting.zig",
-        "tests/searching.zig",
-        // Add more test files here
+        // Add more source files here that contain tests
     };
 
     // Add static library for algorithms
     const algorithms = b.addStaticLibrary(.{
         .name = "algorithms",
-        .root_source_files = src_files,
+        .root_source_file = .{ .path = "src/main.zig" },
         .target = target,
         .optimize = optimize,
     });
     b.installArtifact(algorithms);
 
-    // Add tests
+    // This step will be visible in the `zig build --help` menu
     const test_step = b.step("test", "Run all tests");
-    for (test_files) |test_file| {
+
+    // Add a test runner for each source file that contains tests
+    for (src_files) |file| {
         const t = b.addTest(.{
-            .root_source_file = .{ .path = test_file },
+            .root_source_file = .{ .path = file },
             .target = target,
             .optimize = optimize,
         });
