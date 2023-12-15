@@ -6,19 +6,24 @@ pub fn build(b: *std.Build) void {
 
     // Define array of source files
     const src_files = &[_][]const u8{
-        "src/sorting.zig",
-        "src/searching.zig",
+        "src/sorting/utilities.zig",
+        "src/sorting/bubble.zig",
         // Add more source files here that contain tests
     };
 
-    // Add static library for algorithms
-    const algorithms = b.addStaticLibrary(.{
-        .name = "algorithms",
+    const lib = b.addStaticLibrary(.{
+        .name = "algorithms_and_datastructures",
+        // In this case the main source file is merely a path, however, in more
+        // complicated build scripts, this could be a generated file.
         .root_source_file = .{ .path = "src/main.zig" },
         .target = target,
         .optimize = optimize,
     });
-    b.installArtifact(algorithms);
+
+    // This declares intent for the library to be installed into the standard
+    // location when the user invokes the "install" step (the default step when
+    // running `zig build`).
+    b.installArtifact(lib);
 
     // This step will be visible in the `zig build --help` menu
     const test_step = b.step("test", "Run all tests");

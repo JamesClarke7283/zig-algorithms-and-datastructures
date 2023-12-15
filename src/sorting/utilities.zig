@@ -3,11 +3,9 @@ const testing = std.testing;
 
 pub fn swap(list: []u8, index_a: u8, index_b: u8) ![]u8 {
     if (index_a >= list.len) {
-        std.debug.print("Error: 'index_a' (value: {}) is out of bounds. The list length is {}.\n", .{ index_a, list.len });
         return error.IndexAOutOfBounds;
     }
     if (index_b >= list.len) {
-        std.debug.print("Error: 'index_b' (value: {}) is out of bounds. The list length is {}.\n", .{ index_b, list.len });
         return error.IndexBOutOfBounds;
     }
 
@@ -32,8 +30,4 @@ test "swap function test" {
     // Test swapping boundary elements
     _ = try swap(list[0..], 0, 4);
     try testing.expectEqual(list, [5]u8{ 4, 5, 1, 3, 2 });
-}
-
-pub fn bubblesort(list: []u8) []u8 {
-    return list;
 }
